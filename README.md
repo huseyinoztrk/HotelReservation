@@ -1,1 +1,2 @@
 # HotelReservation
+Otel Rezervasyon uygulamasıdır.
