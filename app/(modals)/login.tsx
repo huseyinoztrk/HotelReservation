@@ -36,6 +36,9 @@ const Page = () => {
                 setActive!({ session: createdSessionId });
                 router.back();
             }
+            else{
+                console.log("girmedi")
+            }
         } catch (err) {
             console.error('OAuth error: ', err);
         }
