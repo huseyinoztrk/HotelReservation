@@ -32,6 +32,9 @@ const Page = () => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
+            headerBackground: () => (
+                <Animated.View style={[headerAnimatedStyle, styles.header]} />
+            ),
             headerRight: () => (
                 <View style={styles.bar}>
                     <TouchableOpacity style={styles.roundButton} onPress={shareListing}>
@@ -65,6 +68,12 @@ const Page = () => {
                     scale: interpolate(scrollOffset.value, [-IMG_HEIGHT, 0, IMG_HEIGHT], [2, 1, 1])
                 }
             ]
+        }
+    })
+
+    const headerAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
         }
     })
 
