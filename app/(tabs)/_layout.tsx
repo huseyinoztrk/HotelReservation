@@ -21,7 +21,7 @@ const Layout = () => {
                         <Ionicons name='search' color={color} size={size} />
                 }}
             />
-             <Tabs.Screen
+            <Tabs.Screen
                 name="wishlists"
                 options={{
                     tabBarLabel: 'Wishlists',
@@ -29,7 +29,7 @@ const Layout = () => {
                         <Ionicons name='heart-outline' color={color} size={size} />
                 }}
             />
-             <Tabs.Screen
+            <Tabs.Screen
                 name="trips"
                 options={{
                     tabBarLabel: 'Trips',
@@ -37,7 +37,7 @@ const Layout = () => {
                         <FontAwesome5 name='airbnb' color={color} size={size} />
                 }}
             />
-             <Tabs.Screen
+            <Tabs.Screen
                 name="inbox"
                 options={{
                     tabBarLabel: 'Inbox',
@@ -45,10 +45,11 @@ const Layout = () => {
                         <MaterialCommunityIcons name='message-outline' color={color} size={size} />
                 }}
             />
-             <Tabs.Screen
+            <Tabs.Screen
                 name="profile"
                 options={{
                     tabBarLabel: 'Profile',
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) =>
                         <Ionicons name='person-circle-outline' color={color} size={size} />
                 }}
