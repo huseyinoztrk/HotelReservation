@@ -1,7 +1,7 @@
 import { View, Text, Button, StyleSheet, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { defaultStyles } from '@/constants/Styles';
@@ -16,6 +16,7 @@ const Page = () => {
   const [lastName, setLastName] = useState(user?.lastName);
   const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress);
   const [edit, setEdit] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) return
@@ -39,6 +40,11 @@ const Page = () => {
       setEdit(false)
     }
   }
+  const adminPanel = () => {
+    if (user?.firstName === 'admin') {
+      router.push('/admin/adminPage')
+    }
+  }
 
   const onCaptureImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -60,7 +66,9 @@ const Page = () => {
     <SafeAreaView style={defaultStyles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Profile</Text>
-        <Ionicons name='notifications-outline' size={26} />
+        <Ionicons name='notifications-outline'
+          onPress={adminPanel}
+          size={26} />
       </View>
 
       {user && (

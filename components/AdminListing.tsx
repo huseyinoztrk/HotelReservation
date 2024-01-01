@@ -13,9 +13,10 @@ interface Props {
     refresh: number;
 }
 
-const Listings = ({ listings: items, category, refresh }: Props) => {
+const AdminListings = ({ listings: items, category, refresh }: Props) => {
     const [loading, setLoading] = useState(false);
     const listRef = useRef<BottomSheetFlatListMethods>(null);
+    const [text, onChangeText] = React.useState();
 
     useEffect(() => {
         if (refresh) {
@@ -32,15 +33,13 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
     }, [category]);
 
     const renderRow: ListRenderItem<Listing> = ({ item }) => (
-        <Link href={`/listing/${item.id}`} asChild>
+        <Link href={`/adminListing/${item.id}`} asChild>
             <TouchableOpacity>
-
                 <Animated.View style={styles.listing} entering={FadeInRight} exiting={FadeOutLeft}>
                     <Image source={{ uri: item.medium_url }} style={styles.image} />
                     <TouchableOpacity style={{ position: 'absolute', right: 30, top: 30 }}>
                         <Ionicons name='heart-outline' size={24} color={'#000'} />
                     </TouchableOpacity>
-
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 16, fontFamily: 'mon-sb' }}>{item.name}</Text>
                         <View style={{ flexDirection: 'row', gap: 4 }}>
@@ -48,9 +47,7 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
                             <Text style={{ fontFamily: 'mon-sb' }}>{item.review_scores_rating / 20}</Text>
                         </View>
                     </View>
-
                     <Text style={{ fontFamily: 'mon' }}>{item.room_type}</Text>
-
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontFamily: 'mon-sb' }}>€ {item.price}</Text>
                         <Text style={{ fontFamily: 'mon' }}> night</Text>
@@ -91,4 +88,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Listings
+export default AdminListings

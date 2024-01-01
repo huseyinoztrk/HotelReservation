@@ -2,21 +2,18 @@ import { View } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import { Stack } from 'expo-router'
 import ExploreHeader from '@/components/ExploreHeader'
-import Listings from '@/components/Listings'
 import listingsData from '@/assets/data/airbnb-listings.json'
-import ListingsMap from '@/components/ListingsMap'
-import listingsDataGeo from '@/assets/data/airbnb-listings.geo.json'
-import ListingBottomSheet from '@/components/ListingBottomSheet'
+import AdminListing from '@/components/AdminListingSheet'
+import AdminListingSheet from '@/components/AdminListingSheet'
 
-const Page = () => {
+const adminPage = () => {
     const [category, setCategory] = useState('Tiny homes')
     const items = useMemo(() => listingsData as any, []);
-    const geoitems = useMemo(() => listingsDataGeo, []);
 
     const onDataChanged = (category: string) => {
         setCategory(category);
     }
-    
+
     return (
         <View style={{ flex: 1, marginTop: 80 }}>
             <Stack.Screen
@@ -24,11 +21,9 @@ const Page = () => {
                     header: () => <ExploreHeader onCategoryChanged={onDataChanged} />,
                 }}
             />
-            {/* <Listings listings={items} category={category} /> */}
-            <ListingsMap listings={geoitems} />
-            <ListingBottomSheet listings={items} category={category} />
+            <AdminListingSheet listings={items} category={category} />
         </View>
     )
 }
 
-export default Page
+export default adminPage

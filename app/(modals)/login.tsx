@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { useOAuth } from '@clerk/clerk-expo';
+import { SignedIn, useOAuth, useSignIn } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 
 enum Strategy {
@@ -13,13 +13,46 @@ enum Strategy {
     Facebook = 'oauth_facebook'
 }
 
+enum Admin {
+    admin = 'admin',
+    password = '1234'
+}
+
 const Page = () => {
     useWarmUpBrowser();
     const router = useRouter();
-
     const { startOAuthFlow: googleAuth } = useOAuth({ strategy: 'oauth_google' });
     const { startOAuthFlow: appleAuth } = useOAuth({ strategy: 'oauth_apple' });
     const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: 'oauth_facebook' });
+    const [username, setUsername] = useState('');
+    const [password, setpassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const { signIn, setActive, isLoaded } = useSignIn();
+
+    const adminPanel = async () => {
+        if (Admin.admin === username && Admin.password === password) {
+            router.back()
+            if (!isLoaded) {
+                return;
+            }
+            setLoading(true);
+            try {
+                const completeSignIn = await signIn.create({
+                    identifier: username,
+                    password
+                });
+                await setActive({ session: completeSignIn.createdSessionId });
+            } catch (err: any) {
+                alert(err.errors[0].message);
+            } finally {
+                setLoading(false)
+            }
+            router.push('/admin/adminPage')
+        } else {
+            alert('Wrong User')
+        }
+    }
 
     const onSelectAuth = async (strategy: Strategy) => {
         const selectedAuth = {
@@ -36,8 +69,8 @@ const Page = () => {
                 setActive!({ session: createdSessionId });
                 router.back();
             }
-            else{
-                console.log("girmedi")
+            else {
+                console.log("createdSessionId is null")
             }
         } catch (err) {
             console.error('OAuth error: ', err);
@@ -46,8 +79,28 @@ const Page = () => {
 
     return (
         <View style={styles.container}>
-            <TextInput autoCapitalize='none' placeholder='Email' style={[defaultStyles.inputField, { marginBottom: 30 }]} />
-            <TouchableOpacity style={defaultStyles.btn}>
+            <Text style={{ marginBottom: 20, fontFamily: 'mon-sb' }}>Admin Account</Text>
+            <TextInput
+                autoCapitalize='none'
+                placeholder='Username'
+                placeholderTextColor={Colors.grey}
+                style={[defaultStyles.inputField, { marginBottom: 30 }]}
+                onChangeText={(text) => setUsername(text)}
+                value={username}
+            />
+            <TextInput
+                autoCapitalize='none'
+                placeholder='Password'
+                placeholderTextColor={Colors.grey}
+                style={[defaultStyles.inputField, { marginBottom: 30 }]}
+                onChangeText={(text) => setpassword(text)}
+                value={password}
+                secureTextEntry={true}
+
+            />
+            <TouchableOpacity style={defaultStyles.btn}
+                onPress={adminPanel}
+            >
                 <Text style={defaultStyles.btnText}>Continue</Text>
             </TouchableOpacity>
 
@@ -83,7 +136,7 @@ const Page = () => {
                     <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     )
 }
 

@@ -118,7 +118,7 @@ const Page = () => {
                             <DatePicker
                                 current={today}
                                 selected={today}
-                                mode='Calendar'
+                                mode='calendar'
                                 options={{
                                     defaultFont: 'mon',
                                     headerFont: 'mon-sb',
