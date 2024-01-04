@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase } from '@/config'
@@ -136,3 +137,17 @@ const styles = StyleSheet.create({
 
     }
 })
+=======
+import { View, Text } from 'react-native'
+import React from 'react'
+
+const adminAddHotel = () => {
+    return (
+        <View>
+            <Text>adminAddHotel</Text>
+        </View>
+    )
+}
+
+export default adminAddHotel
+>>>>>>> 10a342156198d58e2bcc8883f0b2c1ec766c56a8
