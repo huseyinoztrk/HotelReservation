@@ -16,6 +16,7 @@ const Page = () => {
     const onDataChanged = (category: string) => {
         setCategory(category);
     }
+    
     return (
         <View style={{ flex: 1, marginTop: 80 }}>
             <Stack.Screen

@@ -1,11 +1,12 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Haptics from 'expo-haptics'
+import { useSignIn, useUser } from '@clerk/clerk-expo'
 
 const categories = [
     {
@@ -47,6 +48,23 @@ const ExploreHeader = ({ onCategoryChanged }: Props) => {
     const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
     const [activeIndex, setActiveIndex] = useState(1);
 
+    const { user } = useUser();
+    const [firstName, setFirstName] = useState(user?.firstName);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!user) return
+        setFirstName(user.firstName);
+    }, [user]);
+
+    const addHotel = () => {
+        if (user?.firstName === 'admin') {
+            router.push('/admin/adminAddHotel')
+        } else {
+            return;
+        }
+    }
+
     const selectCategory = (index: number) => {
         const selected = itemsRef.current[index];
         setActiveIndex(index);
@@ -70,7 +88,7 @@ const ExploreHeader = ({ onCategoryChanged }: Props) => {
                             </View>
                         </TouchableOpacity>
                     </Link>
-                    <TouchableOpacity style={styles.filterBtn}>
+                    <TouchableOpacity style={styles.filterBtn} onPress={addHotel}>
                         <Ionicons name='options-outline' size={24} />
                     </TouchableOpacity>
                 </View>
