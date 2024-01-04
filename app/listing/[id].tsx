@@ -114,7 +114,7 @@ const Page = () => {
                 contentContainerStyle={{ paddingBottom: 100 }}
                 scrollEventThrottle={16}
             >
-                <Animated.Image source={{ uri: listing.xl_picture_url }} style={[styles.image, imageAnimatedStyle]} />
+                {/* <Animated.Image source={{ uri: listing.xl_picture_url }} style={[styles.image, imageAnimatedStyle]} /> */}
                 <View style={styles.infoContainer}>
                     <Text style={styles.name}>{listing.name}</Text>
                     <Text style={styles.location}>
