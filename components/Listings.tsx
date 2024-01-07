@@ -8,12 +8,12 @@ import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { BottomSheetFlatList, BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
 
 interface Props {
-    listings: any[];
+    listing: any[];
     category: string;
     refresh: number;
 }
 
-const Listings = ({ listings: items, category, refresh }: Props) => {
+const Listings = ({ listing: data, category, refresh }: Props) => {
     const [loading, setLoading] = useState(false);
     const listRef = useRef<BottomSheetFlatListMethods>(null);
 
@@ -34,13 +34,11 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
     const renderRow: ListRenderItem<Listing> = ({ item }) => (
         <Link href={`/listing/${item.id}`} asChild>
             <TouchableOpacity>
-
                 <Animated.View style={styles.listing} entering={FadeInRight} exiting={FadeOutLeft}>
                     <Image source={{ uri: item.medium_url }} style={styles.image} />
-                    <TouchableOpacity style={{ position: 'absolute', right: 30, top: 30 }}>
+                    {/* <TouchableOpacity style={{ position: 'absolute', right: 30, top: 30 }}>
                         <Ionicons name='heart-outline' size={24} color={'#000'} />
-                    </TouchableOpacity>
-
+                    </TouchableOpacity> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 16, fontFamily: 'mon-sb' }}>{item.name}</Text>
                         <View style={{ flexDirection: 'row', gap: 4 }}>
@@ -48,9 +46,7 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
                             <Text style={{ fontFamily: 'mon-sb' }}>{item.review_scores_rating / 20}</Text>
                         </View>
                     </View>
-
                     <Text style={{ fontFamily: 'mon' }}>{item.room_type}</Text>
-
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontFamily: 'mon-sb' }}>€ {item.price}</Text>
                         <Text style={{ fontFamily: 'mon' }}> night</Text>
@@ -65,8 +61,8 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
             <BottomSheetFlatList
                 renderItem={renderRow}
                 ref={listRef}
-                data={loading ? [] : items}
-                ListHeaderComponent={<Text style={styles.info}>{items.length} homes</Text>}
+                data={loading ? [] : data}
+                ListHeaderComponent={<Text style={styles.info}>{data.length} homes</Text>}
             />
         </View>
     )

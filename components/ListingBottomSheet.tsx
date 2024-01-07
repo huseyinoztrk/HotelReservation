@@ -8,11 +8,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
-    listings: Listing[];
+    data: Listing[];
     category: string;
 }
 
-const ListingBottomSheet = ({ listings, category }: Props) => {
+const ListingBottomSheet = ({ data, category }: Props) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['10%', '100%'], []);
     const [refresh, setRefresh] = useState(0);
@@ -31,7 +31,7 @@ const ListingBottomSheet = ({ listings, category }: Props) => {
             handleIndicatorStyle={{ backgroundColor: Colors.grey }}
             style={styles.sheetContainer}>
             <View style={{ flex: 1 }}>
-                <Listings listings={listings} category={category} refresh={refresh} />
+                <Listings listing={data} category={category} refresh={refresh} />
                 <View style={styles.absoluteBtn}>
                     <TouchableOpacity onPress={showMap} style={styles.btn}>
                         <Text style={{ fontFamily: 'mon-sb', color: '#fff' }}>Map</Text>

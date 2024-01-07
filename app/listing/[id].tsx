@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Share } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
 import listingsData from '@/assets/data/airbnb-listings.json'
 import { Listing } from '@/interfaces/listing'
@@ -7,6 +7,7 @@ import Animated, { SlideInDown, interpolate, useAnimatedRef, useAnimatedStyle, u
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { defaultStyles } from '@/constants/Styles'
+import { firebase } from '@/config'
 
 const IMG_HEIGHT = 300;
 const { width } = Dimensions.get('window');
@@ -18,31 +19,20 @@ const Page = () => {
     const scrollRef = useAnimatedRef<Animated.ScrollView>();
     const navigation = useNavigation();
     const scrollOffset = useScrollViewOffset(scrollRef);
+    const todoRef = firebase.firestore().collection('Wishlist');
 
     const goToReverse = () => {
         router.push('/(modals)/reverse');
     }
 
-    let _data = {
-        pictureUrl: listing.xl_picture_url,
-        name: listing.name,
-        roomType: listing.room_type,
-        smartLoc: listing.smart_location,
-        guestInc: listing.guests_included,
-        bedrooms: listing.bedrooms,
-        beds: listing.beds,
-        bathroom: listing.bathrooms,
-        rating: listing.review_scores_rating,
-        numberRev: listing.number_of_reviews,
-        hostPic: listing.host_picture_url,
-        hostName: listing.host_name,
-        hostSince: listing.host_since,
-        description: listing.description,
-        price: listing.price
-    }
     const wishlists = () => {
-
-
+        todoRef.doc(id).set({
+            id: id,
+        })
+            .then(() => {
+                console.log('User added!');
+            });
+        alert('Added to favorites');
     }
 
     const shareListing = async () => {
@@ -66,11 +56,8 @@ const Page = () => {
                     <TouchableOpacity style={styles.roundButton} onPress={shareListing}>
                         <Ionicons name="share-outline" size={22} color={'#000'} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.roundButton}>
-                        <Ionicons name="heart-outline"
-                            onPress={wishlists}
-                            size={22}
-                            color={'#000'} />
+                    <TouchableOpacity style={styles.roundButton} onPress={wishlists}>
+                        <Ionicons name="heart-outline" size={22} color={'#000'} />
                     </TouchableOpacity>
 
                 </View>
@@ -114,7 +101,7 @@ const Page = () => {
                 contentContainerStyle={{ paddingBottom: 100 }}
                 scrollEventThrottle={16}
             >
-                {/* <Animated.Image source={{ uri: listing.xl_picture_url }} style={[styles.image, imageAnimatedStyle]} /> */}
+                <Animated.Image source={{ uri: listing.xl_picture_url }} style={[styles.image, imageAnimatedStyle]} />
                 <View style={styles.infoContainer}>
                     <Text style={styles.name}>{listing.name}</Text>
                     <Text style={styles.location}>
@@ -144,7 +131,6 @@ const Page = () => {
                     <Text style={styles.description}>{listing.description}</Text>
                 </View>
             </Animated.ScrollView >
-
             <Animated.View style={defaultStyles.footer} entering={SlideInDown.delay(200)}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.footerText}>
@@ -157,7 +143,6 @@ const Page = () => {
                     >
                         <Text
                             style={defaultStyles.btnText}
-
                         >Reverse</Text>
                     </TouchableOpacity>
                 </View>
