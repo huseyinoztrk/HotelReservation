@@ -20,19 +20,34 @@ const Page = () => {
     const navigation = useNavigation();
     const scrollOffset = useScrollViewOffset(scrollRef);
     const todoRef = firebase.firestore().collection('Wishlist');
+    const fetchWishId: any = [];
 
     const goToReverse = () => {
         router.push('/(modals)/reverse');
     }
 
     const wishlists = () => {
-        todoRef.doc(id).set({
-            id: id,
-        })
-            .then(() => {
-                console.log('User added!');
+        todoRef.onSnapshot(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                fetchWishId.push(doc.data());
             });
-        alert('Added to favorites');
+        });
+        for (let i = 0; i < fetchWishId.length; i++) {
+            if (fetchWishId[i].id === todoRef.doc(id).id) {
+                alert('The hotel is in favourites.');
+                return;
+            } else {
+                todoRef.doc(id).set({
+                    id: id,
+                })
+                    .then(() => {
+                        console.log('User added!');
+                    });
+                router.push('/(tabs)/wishlists');
+                return;
+            }
+        }
+
     }
 
     const shareListing = async () => {

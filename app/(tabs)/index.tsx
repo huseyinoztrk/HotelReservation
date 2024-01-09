@@ -11,7 +11,6 @@ import { firebase } from '@/config'
 
 const Page = () => {
     const [category, setCategory] = useState('Tiny homes')
-    const items = useMemo(() => listingsData as any, []);
     const geoitems = useMemo(() => listingsDataGeo, []);
     const todoRef = firebase.firestore().collection('Data');
     const [users, setUsers] = useState([]);
